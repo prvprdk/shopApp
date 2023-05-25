@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import productsApi from 'api/products'
+import commentApi from 'api/comment'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
         profile: frontendData.profile,
-        products: frontendData.products
-
+        products
   },
   getters: {
     sortedProducts: state => (state.products || []).sort((a,b) => - (a.id - b.id))
@@ -39,6 +39,23 @@ export default new Vuex.Store({
             ]
         }
       },
+       addCommentMutation(state, comment) {
+            const updateIndex = state.products.findIndex(item => item.id === comment.product.id)
+            const product = state.products[updateIndex]
+            if (updateIndex){
+                 state.products = [
+                      ...state.products.slice(0, updateIndex),
+                      {
+                        ...product,
+                        comments: [
+                            ...product.comments,
+                            comment
+                        ]
+                      },
+                      ...state.products.slice(updateIndex +1)
+                  ]
+              }
+            },
 
   },
   actions: {
@@ -64,7 +81,11 @@ export default new Vuex.Store({
             if (result.ok){
              commit('removeProductMutation', product)
              }
-             }
-
+         },
+         async addCommentAction ({commit,state}, comment){
+             const response = await commentApi.add(comment)
+             const data = await response.json()
+             commit('addCommentMutation', comment)
+         }
   }
 })

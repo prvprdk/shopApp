@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -31,6 +32,13 @@ public class Product {
     private String linkDescription;
     @JsonView(Views.FullProduct.class)
     private String linkCover;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonView(Views.FullProduct.class)
+    private User author;
+    @OneToMany (mappedBy = "product", orphanRemoval = true)
+    @JsonView(Views.FullProduct.class)
+    private List<Comment> comments;
 
 
 }

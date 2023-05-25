@@ -10,7 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class WebSecurityConfig {
-    private UserRepository userRepository;
+
     @Autowired
     private CustomUserService customUserService;
 
@@ -22,6 +22,7 @@ public class WebSecurityConfig {
                 .and()
                 .oauth2Login(auth -> auth.userInfoEndpoint()
                         .oidcUserService(customUserService))
+
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
                         .permitAll())

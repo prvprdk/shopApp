@@ -1,18 +1,18 @@
 package com.example.shop.service;
 
+import com.example.shop.domain.Product;
 import com.example.shop.dto.MetaDto;
 import com.example.shop.dto.ProductDTO;
-import com.example.shop.domain.Product;
 import com.example.shop.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -24,11 +24,13 @@ public class ProductService {
 private final ProductRepository productRepository;
     private static final String URL_PATTERN =  "https?:\\/\\/?[\\w\\d\\._\\-%\\/\\?=&#]+";
 
+
     private static final String IMG_PATTERN = "\\.(jpeg|jpg|gif|png)$";
     private static final Pattern URL_REGEX = Pattern.compile(URL_PATTERN, Pattern.CASE_INSENSITIVE);
     private static final Pattern IMG_REGEX = Pattern.compile(IMG_PATTERN, Pattern.CASE_INSENSITIVE);
 
-    public Product create (ProductDTO dto) throws IOException {
+    private final CustomUserService customUserService;
+    public Product create (ProductDTO dto, OidcUser oidcUser) throws IOException {
 //        Product product = Product.builder()
 //                .name(dto.getName())
 //                .localDateTime(LocalDateTime.now())
@@ -38,6 +40,7 @@ private final ProductRepository productRepository;
      Product product = new Product();
      product.setName(dto.getName());
      product.setLocalDateTime(LocalDateTime.now());
+     product.setAuthor(customUserService.convertedUser(oidcUser));
      fillMeta(product);
 
 

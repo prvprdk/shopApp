@@ -1,6 +1,10 @@
 <template>
-          <v-layout>
-              <v-text-field label="name product" placeholder="name product" v-model="name"></v-text-field>
+          <v-layout row>
+              <v-text-field label="name product"
+               placeholder="name product"
+               v-model="name"
+               @keyup.enter="save"
+               />
               <v-btn @click="save"> save </v-btn>
            </v-layout>
 </template>

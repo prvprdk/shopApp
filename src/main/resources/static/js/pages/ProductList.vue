@@ -1,6 +1,6 @@
 <template>
 <v-container>
-  <v-layout column justify-start align-space-around>
+  <v-layout  column justify-start align-space-around>
               <product-form :productAttr="product" />
               <product-row v-for="product in sortedProducts"
                                   :key="product.id"

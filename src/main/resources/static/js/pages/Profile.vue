@@ -9,11 +9,9 @@
                   </v-flex>
                   <v-flex class="px-1">
                     <v-layout column>
-                         <v-flex>{{profile.fullName}} </v-flex>
+                         <v-flex>{{profile.name}} </v-flex>
                          <v-flex>{{profile.email}} </v-flex>
                          <v-flex>{{profile.locale}} </v-flex>
-                         <v-flex>{{profile.claims.  sub}} </v-flex>
-
                     </v-layout column>
                    </v-flex>
             </v-layout>

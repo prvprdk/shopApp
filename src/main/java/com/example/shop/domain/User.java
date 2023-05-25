@@ -1,5 +1,6 @@
 package com.example.shop.domain;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -16,9 +17,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class User {
     @Id
+    @JsonView(Views.IdName.class)
     private String id;
     private String email;
     private String name;
+    @JsonView(Views.IdName.class)
     private String picture;
     private String locale;
 

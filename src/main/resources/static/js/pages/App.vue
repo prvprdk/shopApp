@@ -12,9 +12,9 @@
             <v-btn v-if="profile" flat
                 :disabled="$route.path === '/profile'"
                  @click="showProfile">
-                    {{profile.fullName}}
+                    {{profile.name}}
              </v-btn>
-            <span v-if="profile">  {{profile.fullName}}</span>
+            <span v-if="profile">  {{profile.name}}</span>
             <v-btn icon v-if="profile" href="/logout" >
                  <v-icon>exit_to_app</v-icon>
             </v-btn>

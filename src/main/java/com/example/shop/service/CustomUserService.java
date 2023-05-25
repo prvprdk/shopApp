@@ -35,18 +35,23 @@ private UserRepository userRepository;
     private OidcUser processOidcUser(OidcUserRequest userRequest, OidcUser oidcUser) {
 
         GoogleUserInfo googleUserInfo = new GoogleUserInfo(oidcUser.getAttributes());
-
         Optional<User> userOptional = userRepository.findById(googleUserInfo.getId());
         if (userOptional.isEmpty()){
-            User user =  User.builder()
-                    .id(googleUserInfo.getId())
-                    .email(googleUserInfo.getEmail())
-                    .name(googleUserInfo.getName())
-                    .picture(googleUserInfo.getPicture())
-                    .locale(googleUserInfo.getLocale())
-                    .build();
-            userRepository.save(user);
+            userRepository.save(convertedUser(oidcUser));
         }
         return oidcUser;
     }
+
+    public User convertedUser (OidcUser oidcUser){
+        GoogleUserInfo googleUserInfo = new GoogleUserInfo(oidcUser.getAttributes());
+        return   User.builder()
+                .id(googleUserInfo.getId())
+                .email(googleUserInfo.getEmail())
+                .name(googleUserInfo.getName())
+                .picture(googleUserInfo.getPicture())
+                .locale(googleUserInfo.getLocale())
+                .build();
+
+    }
+
 }

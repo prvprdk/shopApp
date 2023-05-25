@@ -22,6 +22,7 @@ public class WebSecurityConfig {
                 .and()
                 .oauth2Login(auth -> auth.userInfoEndpoint()
                         .oidcUserService(customUserService))
+
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
                         .permitAll())

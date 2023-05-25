@@ -10,7 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class WebSecurityConfig {
-    private UserRepository userRepository;
+
     @Autowired
     private CustomUserService customUserService;
 

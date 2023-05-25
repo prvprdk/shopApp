@@ -13,7 +13,7 @@ public class CommentService {
     private final CustomUserService customUserService;
 
     @Autowired
-    public CommentService(CommentRepo commentRepo, UserRepository userRepository, CustomUserService customUserService) {
+    public CommentService(CommentRepo commentRepo, CustomUserService customUserService) {
         this.commentRepo = commentRepo;
         this.customUserService = customUserService;
     }

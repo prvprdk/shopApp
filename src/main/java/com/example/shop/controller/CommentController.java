@@ -19,7 +19,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @Autowired
-    public CommentController(CommentService commentService, UserRepository userRepository) {
+    public CommentController(CommentService commentService) {
         this.commentService = commentService;
     }
     @PostMapping

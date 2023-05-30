@@ -20,6 +20,7 @@ public class User {
     @JsonView(Views.IdName.class)
     private String id;
     private String email;
+    @JsonView(Views.IdName.class)
     private String name;
     @JsonView(Views.IdName.class)
     private String picture;

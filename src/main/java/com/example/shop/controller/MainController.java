@@ -44,6 +44,9 @@ public class MainController {
             data.put("profile", customUserService.convertedUser(user));
             String products = writer.writeValueAsString(productRepository.findAll());
             model.addAttribute("products", products);
+        }else {
+            model.addAttribute("products", "[]");
+
         }
             model.addAttribute("frontendData", data);
             model.addAttribute("isDevMode", "dev".equals(profile));

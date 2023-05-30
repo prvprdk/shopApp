@@ -51,7 +51,12 @@ public class ProductController {
         return new ResponseEntity<>(productService.readAll(), HttpStatus.OK);
     }
 
-        @PutMapping("{id}")
+    @GetMapping("{id}")
+    @JsonView(Views.FullProduct.class)
+    public Product getOne(@PathVariable("id") Product product) {
+        return product;
+    }
+        @PutMapping
     public Product update(@RequestBody Product product) throws IOException {
         Product updateProduct = productService.update(product);
         wsSender.accept(EventType.UPDATE, updateProduct);

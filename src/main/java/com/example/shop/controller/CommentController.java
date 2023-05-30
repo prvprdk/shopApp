@@ -23,7 +23,7 @@ public class CommentController {
         this.commentService = commentService;
     }
     @PostMapping
-    @JsonView(Views.FullProduct.class)
+    @JsonView(Views.FullComment.class)
     public Comment create (
             @RequestBody Comment comment,
             @AuthenticationPrincipal OidcUser oidcUser

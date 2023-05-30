@@ -1,9 +1,11 @@
 package com.example.shop.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,10 +15,15 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
+
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @JsonView (Views.IdName.class)
+    @JsonView (Views.Id.class)
     private Long id;
     @JsonView (Views.IdName.class)
     private String name;
@@ -34,10 +41,11 @@ public class Product {
     private String linkCover;
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonView(Views.FullProduct.class)
+    @JsonView (Views.IdName.class)
     private User author;
     @OneToMany (mappedBy = "product", orphanRemoval = true)
-    @JsonView(Views.FullProduct.class)
+    @JsonView(Views.IdName.class)
+
     private List<Comment> comments;
 
 

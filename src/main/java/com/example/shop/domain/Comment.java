@@ -20,9 +20,11 @@ public class Comment {
     private String text;
     @ManyToOne
     @JoinColumn (name="product_id")
+    @JsonView (Views.IdName.class)
+
     private Product product;
     @ManyToOne
     @JoinColumn (name = "user_id", nullable = false, updatable = false)
-    @JsonView (Views.FullProduct.class)
+    @JsonView (Views.IdName.class)
     private User author;
 }

@@ -1,12 +1,14 @@
 <template>
-          <v-layout >
+          <v-layout row class="px-3">
               <v-text-field
                    label="Add comment"
                    placeholder="name product"
                    v-model="text"
                    @keyup.enter="save"
                />
-              <v-btn @click="save"> Add </v-btn>
+              <v-btn class="mx-2" fab dark color="yellow" variant="plain"  x-small @click="save">
+                            <v-icon dark> mdi-plus</v-icon>
+              </v-btn></v-btn>
            </v-layout>
 </template>
 

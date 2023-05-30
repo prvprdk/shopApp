@@ -34,7 +34,10 @@
         export default {
         computed: mapState(['profile']),
         methods: {
-            ...mapMutations ([ 'addProductMutation', 'updateProductMutation', 'removeProductMutation' ]),
+            ...mapMutations ([ 'addProductMutation',
+                               'updateProductMutation',
+                               'removeProductMutation',
+                               'addCommentMutation' ]),
             showProducts () {
                 this.$router.push('/')
                 },
@@ -57,7 +60,15 @@
                         default:
                             console.error ('Looks like the event type if unknown "${data.objectType}"')
                             }
-                    }else{
+                    } else if (data.objectType === 'COMMENT') {
+                    switch (data.eventType){
+                         case 'CREATE':
+                         this.addCommentMutation(data.body)
+                            break
+                         default:
+                            console.error ('Looks like the event type if unknown "${data.objectType}"')
+                            }
+                    } else{
                         console.error ('Looks like the object type if unknown "${data.objectType}"')
                     }
                 })

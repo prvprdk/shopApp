@@ -7,7 +7,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-        profile: frontendData.profile,
+        ...frontendData,
         products
   },
   getters: {
@@ -58,7 +58,21 @@ export default new Vuex.Store({
                   ]
               }
             },
-
+       addProductPageMutation(state, products){
+        const targetProducts = state.products
+        .concat(products)
+        .reduce((res, val) => {
+        res[val.id] = val
+        return res
+            }, {})
+              state.products = Object.values(targetProducts)
+       },
+       updateTotalPagesMutation (state, totalPages){
+        state.totalPages = totalPages
+       },
+       updateCurrentPageMutation (state, currentPage){
+        state.currentPage = currentPage
+       }
   },
   actions: {
        async addProductAction({commit, state}, product){
@@ -88,6 +102,13 @@ export default new Vuex.Store({
              const response = await commentApi.add(comment)
              const data = await response.json()
              commit('addCommentMutation', data)
+         },
+         async loadPageAction ({commit, state}){
+            const response = await productsApi.page(state.currentPage + 1)
+            const data = await response.json()
+             commit('addProductPageMutation', data.products)
+              commit('updateTotalPagesMutation', data.products)
+               commit('updateCurrentPageMutation', Math.min(data.currentPage, data.totalPages))
          }
   }
 })

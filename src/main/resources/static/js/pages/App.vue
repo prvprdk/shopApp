@@ -1,7 +1,7 @@
 <template>
 
   <v-app>
-    <v-app-bar app>
+    <v-app-bar app color="orange" elevation="5" flat>
             <v-toolbar-title> Shop </v-toolbar-title>
             <v-btn flat v-if="profile"
                 :disabled = "$route.path === '/'"

@@ -2,7 +2,6 @@ package com.example.shop.controller;
 
 import com.example.shop.domain.Comment;
 import com.example.shop.domain.Views;
-import com.example.shop.repository.UserRepository;
 import com.example.shop.service.CommentService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;

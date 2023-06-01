@@ -1,6 +1,6 @@
 <template>
 
- <v-card class="my-2" >
+ <v-card class="my-5" >
               <v-card-text class="my-2" primary-title>
                     <div>
                           <v-avatar

@@ -2,52 +2,49 @@ package com.example.shop.service;
 
 import com.example.shop.domain.Product;
 import com.example.shop.dto.MetaDto;
-import com.example.shop.dto.ProductDTO;
+import com.example.shop.dto.ProductPageDto;
 import com.example.shop.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
 @AllArgsConstructor
 public class ProductService {
-private final ProductRepository productRepository;
+
     private static final String URL_PATTERN =  "https?:\\/\\/?[\\w\\d\\._\\-%\\/\\?=&#]+";
-
-
     private static final String IMG_PATTERN = "\\.(jpeg|jpg|gif|png)$";
     private static final Pattern URL_REGEX = Pattern.compile(URL_PATTERN, Pattern.CASE_INSENSITIVE);
     private static final Pattern IMG_REGEX = Pattern.compile(IMG_PATTERN, Pattern.CASE_INSENSITIVE);
 
     private final CustomUserService customUserService;
-    public Product create (ProductDTO dto, OidcUser oidcUser) throws IOException {
-//        Product product = Product.builder()
-//                .name(dto.getName())
-//                .localDateTime(LocalDateTime.now())
-//
-//              //  .category(categoryService.readById(dto.getCategoryId()))
-//                .build();
-     Product product = new Product();
-     product.setName(dto.getName());
-     product.setLocalDateTime(LocalDateTime.now());
-     product.setAuthor(customUserService.convertedUser(oidcUser));
-     fillMeta(product);
+    private final ProductRepository productRepository;
+    public Product create (Product product, OidcUser oidcUser) throws IOException {
 
+        product.setLocalDateTime(LocalDateTime.now());
+        product.setAuthor(customUserService.convertedUser(oidcUser));
+        fillMeta(product);
 
         return productRepository.save(product);
     }
-    public List<Product> readAll (){
-        return productRepository.findAll();
+    public ProductPageDto readAll (Pageable pageable){
+        Page<Product> page = productRepository.findAll(pageable);
+        return new ProductPageDto(
+               page.getContent(),
+                pageable.getPageNumber(),
+                page.getTotalPages()
+        );
     }
 
     public Product update (Product product) throws IOException {

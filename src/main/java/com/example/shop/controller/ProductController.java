@@ -4,20 +4,19 @@ import com.example.shop.domain.Product;
 import com.example.shop.domain.Views;
 import com.example.shop.dto.EventType;
 import com.example.shop.dto.ObjectType;
-import com.example.shop.dto.ProductDTO;
+import com.example.shop.dto.ProductPageDto;
 import com.example.shop.service.CustomUserService;
 import com.example.shop.service.ProductService;
 import com.example.shop.util.WsSender;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.data.domain.Pageable;
 import java.io.IOException;
-import java.util.List;
 import java.util.function.BiConsumer;
 
 @RestController
@@ -25,7 +24,7 @@ import java.util.function.BiConsumer;
 
 public class ProductController {
 
-
+    public static final int PRODUCTS_PER_PAGE = 3;
     private final ProductService productService;
     private final BiConsumer<EventType, Product> wsSender;
 
@@ -36,19 +35,20 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product create(@RequestBody ProductDTO dto,
+    public Product create(@RequestBody Product product,
                           @AuthenticationPrincipal OidcUser oidcUser
                           ) throws IOException {
-        Product product = productService.create(dto, oidcUser);
-        wsSender.accept(EventType.CREATE, product);
 
-        return product;
+        wsSender.accept(EventType.CREATE, product);
+        return productService.create(product, oidcUser);
     }
 
     @GetMapping
-    @JsonView(Views.IdName.class)
-    public ResponseEntity<List<Product>> readAll() {
-        return new ResponseEntity<>(productService.readAll(), HttpStatus.OK);
+    @JsonView(Views.FullProduct.class)
+    public ProductPageDto list(
+            @PageableDefault (size = PRODUCTS_PER_PAGE, sort =  {"id"}, direction = Sort.Direction.DESC) Pageable pageable
+    ){
+        return productService.readAll(pageable);
     }
 
     @GetMapping("{id}")

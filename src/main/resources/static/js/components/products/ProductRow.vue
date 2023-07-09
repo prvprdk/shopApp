@@ -2,24 +2,10 @@
 
  <v-card class="my-5" >
               <v-card-text class="my-2" primary-title>
-                    <div>
-                          <v-avatar
-                                v-if = "product.author && product.author.picture"
-                                size = "15 px"
-                          >
-                                <img
-                                   :src="product.author.picture"
-                                   :alt="product.author.name" >
-                          </v-avatar>
-                          <v-avatar
-                                    v-else
-                                    color="yellow"
-                                    size = "36 px"
-                          >
-                            <v-icon dark> account_circle</v-icon>
-                          </v-avatar>
-                          {{authorName}}
-                    </div>
+                    <user-link
+                            :user="product.author"
+                            :size="48"
+                        ></user-link>
                    <v-card-title> {{ product.name }}</v-card-title>
                     <media v-if="product.link" :product="product"> </media>
               </v-card-text>
@@ -42,15 +28,12 @@
      import {mapActions} from 'vuex'
      import Media from 'components/media/Media.vue'
      import CommentList from '../comment/CommentList.vue'
+     import UserLink from 'components/UserLink.vue'
 
      export default {
      props: ['product', 'editProduct'],
-     components: { CommentList, Media },
-     computed: {
-            authorName() {
-             return this.product.author ? this.product.author.name : 'unknown'
-        }
-     },
+     components: { CommentList, Media, UserLink },
+
 
      methods: {
                  ...mapActions(['removeProductAction']),

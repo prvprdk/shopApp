@@ -10,4 +10,6 @@ public final class Views {
 
     public  interface  FullProduct extends IdName{}
 
+    public interface FullProfile extends IdName {
+    }
 }

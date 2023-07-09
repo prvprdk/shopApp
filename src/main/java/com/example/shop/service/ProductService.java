@@ -1,21 +1,30 @@
 package com.example.shop.service;
 
 import com.example.shop.domain.Product;
+import com.example.shop.domain.Views;
+import com.example.shop.dto.EventType;
 import com.example.shop.dto.MetaDto;
+import com.example.shop.dto.ObjectType;
 import com.example.shop.dto.ProductPageDto;
 import com.example.shop.repository.ProductRepository;
+import com.example.shop.util.WsSender;
 import lombok.AllArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 
+
+
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,12 +39,21 @@ public class ProductService {
 
     private final CustomUserService customUserService;
     private final ProductRepository productRepository;
+    private final BiConsumer<EventType, Product> wsSender;
+
+    @Autowired
+    public ProductService(CustomUserService customUserService, ProductRepository productRepository, WsSender wsSender) {
+        this.customUserService = customUserService;
+        this.productRepository = productRepository;
+        this.wsSender = wsSender.getSender(ObjectType.MESSAGE, Views.IdName.class);
+    }
+
     public Product create (Product product, OidcUser oidcUser) throws IOException {
 
         product.setLocalDateTime(LocalDateTime.now());
         product.setAuthor(customUserService.convertedUser(oidcUser));
         fillMeta(product);
-
+        wsSender.accept(EventType.CREATE, product);
         return productRepository.save(product);
     }
     public ProductPageDto readAll (Pageable pageable){
@@ -47,12 +65,19 @@ public class ProductService {
         );
     }
 
-    public Product update (Product product) throws IOException {
-        fillMeta(product);
-        return productRepository.save(product);
+    public Product update (Product product, Product productFromDb) throws IOException {
+
+
+
+        productFromDb.setName(product.getName());
+        fillMeta(productFromDb);
+        Product updatedProduct = productRepository.save(productFromDb);
+        wsSender.accept(EventType.UPDATE, updatedProduct);
+        return  updatedProduct;
     }
     public void delete (Product product){
         productRepository.delete( product );
+        wsSender.accept(EventType.REMOVE, product);
 
     }
 

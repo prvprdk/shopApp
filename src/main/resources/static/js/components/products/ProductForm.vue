@@ -17,7 +17,7 @@ export default {
     data() {
         return {
            id: '',
-           name:  ''
+           name:  null
         }
     },
     watch: {
@@ -40,7 +40,7 @@ export default {
                this.addProductAction(product)
             }
              this.name = ''
-             this.id = ''
+             this.id = null
             }
         }
     }

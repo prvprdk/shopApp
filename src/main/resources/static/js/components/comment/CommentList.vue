@@ -11,7 +11,6 @@
                          </v-divider>
                          <comment-item :comment= "item"
                                        :key = "'item' + index" >
-
                          </comment-item>
 
                  </template>

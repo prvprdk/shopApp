@@ -1,10 +1,11 @@
 <template>
           <v-list-item>
-          <v-list-item-avatar>
-                               <v-img :src="comment.author.picture"></v-img>
-                           </v-list-item-avatar>
+            <user-link
+                     :user="comment.author"
+                     ></user-link>
+
                 <v-list-item-content>
-                 <v-list-item-subtitle> {{comment.author.name}}</v-list-item-subtitle>
+
                     <v-list-item-title>{{comment.text}}</v-list-item-title>
                  </v-list-item-content>
            </v-list-item>
@@ -12,10 +13,12 @@
 
 
 <script>
-
+import UserLink from 'components/UserLink.vue'
 export default {
         name: 'CommentItem',
-        props: ['comment']
+        props: ['comment'],
+        components: { UserLink },
+
         }
 
 </script>

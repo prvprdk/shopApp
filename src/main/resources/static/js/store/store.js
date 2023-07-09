@@ -3,12 +3,14 @@ import Vuex from 'vuex'
 import productsApi from 'api/products'
 import commentApi from 'api/comment'
 
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-        ...frontendData,
-        products
+        profile,
+        products,
+         ...frontendData,
   },
   getters: {
     sortedProducts: state => (state.products || []).sort((a,b) => - (a.id - b.id))

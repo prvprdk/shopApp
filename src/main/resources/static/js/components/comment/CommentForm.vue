@@ -20,6 +20,7 @@ export default {
         props: ['productId'],
         data () {
           return {
+            id: null,
             text: ''
           }
         },
@@ -32,6 +33,7 @@ export default {
                                 id: this.productId
                             }
                    })
+                    id: null,
                     this.text = ''
                 }
             },

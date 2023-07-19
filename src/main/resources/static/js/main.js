@@ -7,7 +7,7 @@ import store from 'store/store'
 import {connect} from 'util/ws'
 import router from 'router/router'
 
-if (frontendData.profile){
+if (profile){
     connect()
 }
 

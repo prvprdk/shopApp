@@ -44,13 +44,13 @@ private UserRepository userRepository;
 
     public User convertedUser (OidcUser oidcUser){
         GoogleUserInfo googleUserInfo = new GoogleUserInfo(oidcUser.getAttributes());
-        return   User.builder()
-                .id(googleUserInfo.getId())
-                .email(googleUserInfo.getEmail())
-                .name(googleUserInfo.getName())
-                .picture(googleUserInfo.getPicture())
-                .locale(googleUserInfo.getLocale())
-                .build();
+        User user = new User();
+        user.setId(googleUserInfo.getId());
+        user.setEmail(googleUserInfo.getEmail());
+        user.setName(googleUserInfo.getName());
+        user.setPicture(googleUserInfo.getPicture());
+        user.setLocale(googleUserInfo.getLocale());
+        return    user;
 
     }
 

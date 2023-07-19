@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -18,9 +15,9 @@ import java.util.Set;
 @Entity
 @Table (name = "usr")
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(of = {"id", "name"} )
 public class User implements Serializable {
     @Id
     @JsonView(Views.IdName.class)
@@ -34,32 +31,19 @@ public class User implements Serializable {
     private String locale;
 
 
-    @ManyToMany
+
     @JsonView(Views.FullProfile.class)
-    @JoinTable (
-            name = "user_subscriptions",
-            joinColumns = @JoinColumn(name="subscriber_id"),
-            inverseJoinColumns = @JoinColumn(name ="channel_id")
-    )
-    @JsonIdentityInfo(
-            property = "id",
-            generator = ObjectIdGenerators.PropertyGenerator.class
-    )
-    @JsonIdentityReference
-    private Set<User> subscriptions = new HashSet<>();
-    @ManyToMany
+    @OneToMany (mappedBy = "subscriber",
+    orphanRemoval = true )
+    private Set<UserSubscription> subscriptions = new HashSet<>();
+
+
     @JsonView(Views.FullProfile.class)
-    @JsonIdentityInfo(
-            property = "id",
-            generator = ObjectIdGenerators.PropertyGenerator.class
+    @OneToMany (mappedBy = "channel",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL
     )
-    @JsonIdentityReference
-    @JoinTable (
-            name = "user_subscriptions",
-            joinColumns = @JoinColumn(name ="channel_id"),
-            inverseJoinColumns = @JoinColumn(name="subscriber_id")
-    )
-    private Set<User> subscribers = new HashSet<>();
+    private Set<UserSubscription> subscribers = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

@@ -16,8 +16,8 @@ export default {
     props: [ 'productAttr'],
     data() {
         return {
-           id: '',
-           name:  null
+           id: null,
+           name:  ''
         }
     },
     watch: {
